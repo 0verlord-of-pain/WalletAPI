@@ -7,5 +7,5 @@ public class UserView
     public DateTime CreatedOnUtc { get; set; }
     public DateTime UpdatedOnUtc { get; set; }
     public bool IsArchived { get; set; }
-    public IEnumerable<string> Roles { get; set; }
+    public string?[] Roles { get; set; }
 }
