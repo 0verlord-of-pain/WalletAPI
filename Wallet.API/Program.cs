@@ -1,31 +1,58 @@
-namespace Wallet.API
+using MediatR;
+using System.Reflection;
+using System.Text.Json.Serialization;
+using Wallet.API.Infrastructure.Extensions;
+using Wallet.API.Infrastructure.Seed;
+using Wallet.Application;
+
+namespace Wallet.API;
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-            
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+        var builder = WebApplication.CreateBuilder(args);
+        var services = builder.Services;
 
-            var app = builder.Build();
-
-            if (app.Environment.IsDevelopment())
+        services.AddDbContextsCustom(builder.Configuration);
+        services.AddControllers()
+            .AddJsonOptions(options =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
 
-            app.UseHttpsRedirection();
+        services.AddIdentityCustom();
 
-            app.UseAuthorization();
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddScoped<ISeedService, SeedService>();
 
+        services.AddAuthenticationCustom();
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen(c => { c.SchemaFilter<EnumSchemaFilterExtension>(); });
 
-            app.MapControllers();
+        services.AddMediatR(Assembly.GetExecutingAssembly(), typeof(AssemblyInfo).GetTypeInfo().Assembly);
 
-            app.Run();
+        var app = builder.Build();
+
+        app.UseSwagger();
+        app.UseSwaggerUI();
+
+        app.UseErrorHandler(builder.Environment);
+        app.UseHttpsRedirection();
+        app.UseRouting();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+        try
+        {
+            SeedData.EnsureSeedData(app.Services).GetAwaiter().GetResult();
         }
+        catch (Exception ex)
+        {
+            var logger = app.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogError(ex, "An error occurred seeding the DB.");
+        }
+
+        app.Run();
     }
 }
