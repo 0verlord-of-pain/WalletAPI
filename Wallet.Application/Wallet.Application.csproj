@@ -12,7 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="CQRS\" />
+    <ProjectReference Include="..\Wallet.Core\Wallet.Core.csproj" />
+    <ProjectReference Include="..\Wallet.Domain\Wallet.Domain.csproj" />
+    <ProjectReference Include="..\Wallet.Storage\Wallet.Storage.csproj" />
   </ItemGroup>
 
 </Project>
