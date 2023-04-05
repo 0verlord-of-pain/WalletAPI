@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Wallet.Application.CQRS.CardsBalance.Queries.Views;
 using Wallet.Application.CQRS.Transactions.Queries.Views;
 using Wallet.Application.CQRS.Users.Queries.Views;
 using Wallet.Domain.Entities;
@@ -9,6 +10,7 @@ public sealed class RegisterViews : Profile
     public RegisterViews()
     {
         CreateMap<User, UserView>();
+
         CreateMap<Transaction, TransactionView>()
             .ForMember(dest => dest.UserName,
                 dest => dest
@@ -18,5 +20,7 @@ public sealed class RegisterViews : Profile
                     .MapFrom(src => 
                         src.CreatedOnUtc >= new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day)
                             .AddDays(-7) ? src.CreatedOnUtc.DayOfWeek.ToString() : src.CreatedOnUtc.ToString("MM/dd/yyyy, hh:mm")));
+
+        CreateMap<CardBalance, CardBalanceView>();
     }
 }

@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Wallet.Application.CQRS.Transactions.Commands.Create;
 using Wallet.Application.CQRS.Transactions.Commands.Delete;
 using Wallet.Application.CQRS.Transactions.Queries.Views;
+using Wallet.Core.Enums;
 using Wallet.Domain.Entities;
 using Wallet.Storage.Persistence;
 
@@ -26,13 +28,26 @@ public class TransactionCommandHandler :
 
     public async Task<TransactionView> Handle(CreateTransactionCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByIdAsync(request.UserId.ToString());
+        var user = await _userManager.FindByIdAsync(request.UserId.ToString()); 
+
+        var cardBalance = await _context.CardsBalance.FirstOrDefaultAsync(i => i.Id == request.CardBalanceId, cancellationToken);
 
         var transaction = Transaction.Create(request.Type, request.Amount, request.Name, request.Details,
             request.Status, user, request.ImageUrl);
 
         _context.Transactions.Add(transaction);
-        await  _context.SaveChangesAsync(cancellationToken);
+
+        switch (request.Type)
+        {
+            case TransactionType.Credit:
+                cardBalance?.ChangeBalance(-request.Amount);
+                break;
+            case TransactionType.Payment:
+                cardBalance?.ChangeBalance(request.Amount);
+                break;
+        }
+
+        await _context.SaveChangesAsync(cancellationToken);
 
         var result = _mapper.Map<TransactionView>(transaction);
 
@@ -42,7 +57,7 @@ public class TransactionCommandHandler :
     public async Task<Unit> Handle(DeleteTransactionCommand request, CancellationToken cancellationToken)
     {
         var transaction = _context.Transactions
-            .FirstOrDefault(i=>i.Id == request.TransactionId);
+            .FirstOrDefault(i => i.Id == request.TransactionId);
 
         transaction?.SoftDelete();
 

@@ -49,6 +49,7 @@ public class TransactionController : BaseController
     {
         var command = new CreateTransactionCommand(
             UserId, 
+            model.CardBalanceId,
             model.Type, 
             model.Amount, 
             model.Name, 

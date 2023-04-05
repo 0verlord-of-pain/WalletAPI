@@ -13,7 +13,7 @@ using Wallet.Core.Exceptions;
 using Wallet.Core.Extensions;
 using Wallet.Domain.Entities;
 
-namespace Wallet.API.Controllers;
+namespace Wallet.API.Controllers; 
 public class AccountController : BaseController
 {
     private readonly SignInManager<User> _signInManager;
