@@ -22,7 +22,7 @@ public sealed class UserCommandHandler :
     {
         var user = await _context.Users.FirstOrDefaultAsync(i => i.Id == request.UserId, cancellationToken);
 
-        user.SoftDelete();
+        user?.SoftDelete();
 
         await _context.SaveChangesAsync(cancellationToken);
 
@@ -36,7 +36,7 @@ public sealed class UserCommandHandler :
         var user = await _context.Users
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
-        user.Restore();
+        user?.Restore();
         await _context.SaveChangesAsync(cancellationToken);
         return user.Id;
     }

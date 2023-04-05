@@ -17,6 +17,6 @@ public sealed class DeleteUserPreProcessor : IRequestPreProcessor<DeleteUserComm
     {
         var user = await _context.Users.FirstOrDefaultAsync(i => i.Id == request.UserId, cancellationToken);
 
-        if (user == null) throw new NotFoundException("User was not found");
+        if (user is null) throw new NotFoundException("User was not found");
     }
 }

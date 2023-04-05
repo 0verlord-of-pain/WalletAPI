@@ -12,7 +12,7 @@ public sealed class UsersQueryHandler :
     IRequestHandler<GetAllUsersQuery, IEnumerable<UserView>>,
     IRequestHandler<GetUserQuery, UserView>
 {
-    private const int limit = 25;
+    private const int limit = 10;
     private readonly DataContext _context;
     private readonly IMapper _mapper;
 

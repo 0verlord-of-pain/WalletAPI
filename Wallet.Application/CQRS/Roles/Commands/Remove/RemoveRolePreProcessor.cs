@@ -17,7 +17,7 @@ public sealed class RemoveRolePreProcessor : IRequestPreProcessor<RemoveRoleComm
     public async Task Process(RemoveRoleCommand request, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByIdAsync(request.UserId.ToString());
-        if (user == null) throw new NotFoundException("User was not found");
+        if (user is null) throw new NotFoundException("User was not found");
         var userPolicy = await _userManager.GetRolesAsync(user);
         if (!userPolicy.Contains(request.Role.ToString()))
             throw new NotFoundException($"User was not have {request.Role} role");

@@ -80,7 +80,7 @@ public class AccountController : BaseController
             throw new ValidationException("Password is not valid");
 
         var user = await _userManager.FindByEmailAsync(email);
-        if (user == null) throw new IdentityUserException("User with this email not found");
+        if (user is null) throw new IdentityUserException("User with this email not found");
 
         if (user.IsArchived)
             throw new UserDeleteException(
@@ -127,6 +127,7 @@ public class AccountController : BaseController
 
     [HttpDelete("{userId}")]
     [Authorize(Policy = Policies.AdminOrManager)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete([FromRoute] Guid userId)
     {
         var command = new DeleteUserCommand(userId);
