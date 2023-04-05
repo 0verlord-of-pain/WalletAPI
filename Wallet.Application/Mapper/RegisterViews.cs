@@ -12,6 +12,11 @@ public sealed class RegisterViews : Profile
         CreateMap<Transaction, TransactionView>()
             .ForMember(dest => dest.UserName,
                 dest => dest
-                    .MapFrom(src => src.User.UserName));
+                    .MapFrom(src => src.User.UserName))
+            .ForMember(dest => dest.CreatedOnUtc,
+                dest => dest
+                    .MapFrom(src => 
+                        src.CreatedOnUtc >= new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day)
+                            .AddDays(-7) ? src.CreatedOnUtc.DayOfWeek.ToString() : src.CreatedOnUtc.ToString()));
     }
 }
