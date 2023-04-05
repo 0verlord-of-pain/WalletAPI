@@ -15,6 +15,7 @@ public class DataContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     }
 
     public DbSet<Transaction> Transactions { get; set; }
+    public DbSet<CardBalance> CardsBalance { get; set; }
 
     public override async Task<int> SaveChangesAsync(
         bool acceptAllChangesOnSuccess,

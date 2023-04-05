@@ -7,6 +7,7 @@ public class CreateTransactionCommand : IRequest<TransactionView>
 {
     public CreateTransactionCommand(
         Guid userId,
+        Guid cardBalanceId,
         TransactionType type,
         decimal amount,
         string name,
@@ -15,6 +16,7 @@ public class CreateTransactionCommand : IRequest<TransactionView>
         string imageUrl)
     {
         UserId = userId;
+        CardBalanceId = cardBalanceId;
         Type = type;
         Amount = amount;
         Name = name;
@@ -24,6 +26,7 @@ public class CreateTransactionCommand : IRequest<TransactionView>
     }
 
     public Guid UserId { get; init; }
+    public Guid CardBalanceId { get; init; }
     public TransactionType Type { get; init; }
     public decimal Amount { get; init; }
     public string Name { get; init; }
