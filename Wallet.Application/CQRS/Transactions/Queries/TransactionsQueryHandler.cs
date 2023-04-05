@@ -1,15 +1,17 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Wallet.Application.CQRS.Transactions.Queries.GetTransaction;
-using Wallet.Application.CQRS.Transactions.Queries.GetTransactionByUserId;
+using Wallet.Application.CQRS.Transactions.Queries.GetTransactionById;
+using Wallet.Application.CQRS.Transactions.Queries.GetTransactions;
+using Wallet.Application.CQRS.Transactions.Queries.GetTransactionsByUserId;
 using Wallet.Application.CQRS.Transactions.Queries.Views;
 using Wallet.Storage.Persistence;
 
 namespace Wallet.Application.CQRS.Transactions.Queries;
 public sealed class TransactionsQueryHandler :
     IRequestHandler<GetUserTransactionsQuery, IEnumerable<TransactionView>>,
-    IRequestHandler<GetTransactionsByUserIdQuery, IEnumerable<TransactionView>>
+    IRequestHandler<GetTransactionsByUserIdQuery, IEnumerable<TransactionView>>,
+    IRequestHandler<GetTransactionByIdQuery, TransactionView>
 {
     private const int Limit = 10;
     private readonly DataContext _context;
@@ -47,6 +49,18 @@ public sealed class TransactionsQueryHandler :
             .ToListAsync(cancellationToken);
 
         var result = _mapper.Map<IEnumerable<TransactionView>>(transactions);
+
+        return result;
+    }
+
+    public async Task<TransactionView> Handle(
+        GetTransactionByIdQuery request,
+        CancellationToken cancellationToken)
+    {
+        var transactions = await _context.Transactions
+            .FirstOrDefaultAsync(i=> i.Id == request.TransactionId,cancellationToken);
+
+        var result = _mapper.Map<TransactionView>(transactions);
 
         return result;
     }
