@@ -18,6 +18,6 @@ public sealed class RestoreUserPreProcessor : IRequestPreProcessor<RestoreUserCo
         var user = await _context.Users
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(i => i.Id == request.UserId, cancellationToken);
-        if (user == null) throw new NotFoundException("User was not found");
+        if (user is null) throw new NotFoundException("User was not found");
     }
 }

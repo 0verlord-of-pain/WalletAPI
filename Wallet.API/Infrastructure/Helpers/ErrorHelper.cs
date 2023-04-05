@@ -7,7 +7,7 @@ internal static class ErrorHelper
 {
     public static ErrorResponse CreateErrorResponse(Exception exception, bool includeStackTrace = false)
     {
-        if (exception == null) return null;
+        if (exception is null) return null;
 
         ErrorResponse errorResponse;
 

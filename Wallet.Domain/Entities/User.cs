@@ -3,6 +3,7 @@
 namespace Wallet.Domain.Entities;
 public class User : IdentityUser<Guid>, IBaseEntity
 {
+    public ICollection<Transaction> Transactions { get; set; }
     public DateTime CreatedOnUtc { get; set; }
     public DateTime? UpdatedOnUtc { get; set; }
     public bool IsArchived { get; set; }

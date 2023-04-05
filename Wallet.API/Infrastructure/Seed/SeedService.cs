@@ -36,7 +36,7 @@ internal sealed class SeedService : ISeedService
         if (_userManager.Users.All(u => u.Id != defaultAdmin.Id))
         {
             var user = await _userManager.FindByEmailAsync(defaultAdmin.Email);
-            if (user == null)
+            if (user is null)
             {
                 await _userManager.CreateAsync(defaultAdmin, "admin1");
                 await _userManager.AddToRoleAsync(defaultAdmin, Roles.Admin.ToString());
@@ -56,7 +56,7 @@ internal sealed class SeedService : ISeedService
         if (_userManager.Users.All(u => u.Id != defaultManager.Id))
         {
             var user = await _userManager.FindByEmailAsync(defaultManager.Email);
-            if (user == null)
+            if (user is null)
             {
                 await _userManager.CreateAsync(defaultManager, "manager1");
                 await _userManager.AddToRoleAsync(defaultManager, Roles.Manager.ToString());

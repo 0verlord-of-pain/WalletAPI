@@ -11,9 +11,10 @@ public class DataContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         DbContextOptions<DataContext> options)
         : base(options)
     {
-        //Database.EnsureDeleted();
-        if (Database.EnsureCreated()) Database.Migrate();
+        Database.Migrate();
     }
+
+    public DbSet<Transaction> Transactions { get; set; }
 
     public override async Task<int> SaveChangesAsync(
         bool acceptAllChangesOnSuccess,

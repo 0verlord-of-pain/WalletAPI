@@ -24,7 +24,6 @@ public class Program
 
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         services.AddScoped<ISeedService, SeedService>();
-
         services.AddAuthenticationCustom();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(c => { c.SchemaFilter<EnumSchemaFilterExtension>(); });
