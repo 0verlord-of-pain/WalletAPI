@@ -4,8 +4,9 @@ using Wallet.API.Controllers.In;
 using Wallet.API.Persistence;
 using Wallet.Application.CQRS.Transactions.Commands.Create;
 using Wallet.Application.CQRS.Transactions.Commands.Delete;
-using Wallet.Application.CQRS.Transactions.Queries.GetTransaction;
-using Wallet.Application.CQRS.Transactions.Queries.GetTransactionByUserId;
+using Wallet.Application.CQRS.Transactions.Queries.GetTransactionById;
+using Wallet.Application.CQRS.Transactions.Queries.GetTransactions;
+using Wallet.Application.CQRS.Transactions.Queries.GetTransactionsByUserId;
 using Wallet.Application.CQRS.Transactions.Queries.Views;
 
 namespace Wallet.API.Controllers;
@@ -20,7 +21,17 @@ public class TransactionController : BaseController
         var result = await _mediator.Send(command);
         return Ok(result);
     }
-    
+
+    [HttpGet("{transactionId}")]
+    [Authorize(Policy = Policies.User)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetTransaction([FromRoute] Guid transactionId)
+    {
+        var command = new GetTransactionByIdQuery(UserId, transactionId);
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
+
     [HttpGet("users/{userId}")]
     [Authorize(Policy = Policies.AdminOrManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]

@@ -1,12 +1,12 @@
 ﻿using MediatR.Pipeline;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Wallet.Application.CQRS.Transactions.Queries.GetTransaction;
+using Wallet.Application.CQRS.Transactions.Queries.GetTransactions;
 using Wallet.Core.Exceptions;
 using Wallet.Domain.Entities;
 using Wallet.Storage.Persistence;
 
-namespace Wallet.Application.CQRS.Transactions.Queries.GetTransactionByUserId;
+namespace Wallet.Application.CQRS.Transactions.Queries.GetTransactionsByUserId;
 public sealed class GetUserTransactionsPreProcessor : IRequestPreProcessor<GetUserTransactionsQuery>
 {
     private readonly DataContext _context;
