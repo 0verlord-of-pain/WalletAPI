@@ -7,6 +7,7 @@ using Wallet.Application.CQRS.Users.Queries.Views;
 using Wallet.Core.Enums;
 
 namespace Wallet.API.Controllers;
+
 public class RoleController : BaseController
 {
     [HttpPut("{userId}/role/{role}/attach")]

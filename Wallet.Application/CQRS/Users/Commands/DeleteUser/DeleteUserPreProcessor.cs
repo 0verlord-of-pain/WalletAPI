@@ -4,6 +4,7 @@ using Wallet.Core.Exceptions;
 using Wallet.Storage.Persistence;
 
 namespace Wallet.Application.CQRS.Users.Commands.DeleteUser;
+
 public sealed class DeleteUserPreProcessor : IRequestPreProcessor<DeleteUserCommand>
 {
     private readonly DataContext _context;

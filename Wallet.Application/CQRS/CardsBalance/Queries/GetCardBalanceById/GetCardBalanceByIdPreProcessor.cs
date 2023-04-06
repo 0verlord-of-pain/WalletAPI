@@ -6,6 +6,7 @@ using Wallet.Domain.Entities;
 using Wallet.Storage.Persistence;
 
 namespace Wallet.Application.CQRS.CardsBalance.Queries.GetCardBalanceById;
+
 public sealed class GetCardBalanceByIdPreProcessor : IRequestPreProcessor<GetCardBalanceByIdQuery>
 {
     private readonly DataContext _context;

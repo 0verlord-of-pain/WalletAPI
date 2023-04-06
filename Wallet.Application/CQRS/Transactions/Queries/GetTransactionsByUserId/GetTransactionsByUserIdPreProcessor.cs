@@ -1,24 +1,24 @@
 ﻿using MediatR.Pipeline;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Wallet.Application.CQRS.Transactions.Queries.GetTransactions;
 using Wallet.Core.Exceptions;
 using Wallet.Domain.Entities;
 using Wallet.Storage.Persistence;
 
 namespace Wallet.Application.CQRS.Transactions.Queries.GetTransactionsByUserId;
-public sealed class GetUserTransactionsPreProcessor : IRequestPreProcessor<GetUserTransactionsQuery>
+
+public sealed class GetTransactionsByUserIdPreProcessor : IRequestPreProcessor<GetTransactionsByUserIdQuery>
 {
     private readonly DataContext _context;
     private readonly UserManager<User> _userManager;
 
-    public GetUserTransactionsPreProcessor(UserManager<User> userManager, DataContext context)
+    public GetTransactionsByUserIdPreProcessor(UserManager<User> userManager, DataContext context)
     {
         _userManager = userManager;
         _context = context;
     }
 
-    public async Task Process(GetUserTransactionsQuery request, CancellationToken cancellationToken)
+    public async Task Process(GetTransactionsByUserIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _context.Users.FirstOrDefaultAsync(i => i.Id == request.UserId, cancellationToken);
 

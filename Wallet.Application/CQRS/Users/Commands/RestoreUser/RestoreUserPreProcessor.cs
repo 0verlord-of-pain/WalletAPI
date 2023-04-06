@@ -4,6 +4,7 @@ using Wallet.Core.Exceptions;
 using Wallet.Storage.Persistence;
 
 namespace Wallet.Application.CQRS.Users.Commands.RestoreUser;
+
 public sealed class RestoreUserPreProcessor : IRequestPreProcessor<RestoreUserCommand>
 {
     private readonly DataContext _context;

@@ -28,11 +28,12 @@ public class TransactionCommandHandler :
 
     public async Task<TransactionView> Handle(CreateTransactionCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByIdAsync(request.UserId.ToString()); 
+        var user = await _userManager.FindByIdAsync(request.UserId.ToString());
 
-        var cardBalance = await _context.CardsBalance.FirstOrDefaultAsync(i => i.Id == request.CardBalanceId, cancellationToken);
+        var cardBalance =
+            await _context.CardsBalance.FirstOrDefaultAsync(i => i.Id == request.CardBalanceId, cancellationToken);
 
-        var transaction = Transaction.Create(request.Type, request.Amount, request.Name, request.Details,
+        var transaction = Transaction.Create(request.Type, request.Amount, user.UserName, request.Details,
             request.Status, user, request.ImageUrl);
 
         _context.Transactions.Add(transaction);

@@ -3,6 +3,7 @@ using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Wallet.API.Infrastructure.Extensions;
+
 public class EnumSchemaFilterExtension : ISchemaFilter
 {
     public void Apply(OpenApiSchema schema, SchemaFilterContext context)

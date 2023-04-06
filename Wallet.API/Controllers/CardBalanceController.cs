@@ -7,6 +7,7 @@ using Wallet.Application.CQRS.CardsBalance.Queries.GetCardBalanceByUserId;
 using Wallet.Application.CQRS.CardsBalance.Queries.Views;
 
 namespace Wallet.API.Controllers;
+
 public class CardBalanceController : BaseController
 {
     [HttpGet("users/{userId}")]

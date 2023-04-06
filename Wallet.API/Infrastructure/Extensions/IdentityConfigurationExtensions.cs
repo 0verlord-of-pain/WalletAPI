@@ -3,6 +3,7 @@ using Wallet.Domain.Entities;
 using Wallet.Storage.Persistence;
 
 namespace Wallet.API.Infrastructure.Extensions;
+
 public static class IdentityConfigurationExtensions
 {
     public static IServiceCollection AddIdentityCustom(

@@ -4,6 +4,7 @@ using Wallet.Core.Exceptions;
 using Wallet.Storage.Persistence;
 
 namespace Wallet.Application.CQRS.Users.Queries.GetUser;
+
 public sealed class GetUserQueryPreProcessor : IRequestPreProcessor<GetUserQuery>
 {
     private readonly DataContext _context;

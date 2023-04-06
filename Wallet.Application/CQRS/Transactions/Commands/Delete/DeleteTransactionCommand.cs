@@ -1,5 +1,7 @@
 ﻿using MediatR;
+
 namespace Wallet.Application.CQRS.Transactions.Commands.Delete;
+
 public class DeleteTransactionCommand : IRequest<Unit>
 {
     public DeleteTransactionCommand(

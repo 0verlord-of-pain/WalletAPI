@@ -3,6 +3,7 @@ using Wallet.Application.CQRS.Transactions.Queries.Views;
 using Wallet.Core.Enums;
 
 namespace Wallet.Application.CQRS.Transactions.Commands.Create;
+
 public class CreateTransactionCommand : IRequest<TransactionView>
 {
     public CreateTransactionCommand(
@@ -10,7 +11,6 @@ public class CreateTransactionCommand : IRequest<TransactionView>
         Guid cardBalanceId,
         TransactionType type,
         decimal amount,
-        string name,
         string details,
         TransactionStatus status,
         string imageUrl)
@@ -19,7 +19,6 @@ public class CreateTransactionCommand : IRequest<TransactionView>
         CardBalanceId = cardBalanceId;
         Type = type;
         Amount = amount;
-        Name = name;
         Details = details;
         Status = status;
         ImageUrl = imageUrl;
@@ -29,7 +28,6 @@ public class CreateTransactionCommand : IRequest<TransactionView>
     public Guid CardBalanceId { get; init; }
     public TransactionType Type { get; init; }
     public decimal Amount { get; init; }
-    public string Name { get; init; }
     public string Details { get; init; }
     public TransactionStatus Status { get; init; }
     public string ImageUrl { get; init; }

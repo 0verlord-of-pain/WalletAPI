@@ -6,6 +6,7 @@ using Wallet.Domain.Entities;
 using Wallet.Storage.Persistence;
 
 namespace Wallet.Application.CQRS.Transactions.Queries.GetTransactionById;
+
 public sealed class GetTransactionByIdPreProcessor : IRequestPreProcessor<GetTransactionByIdQuery>
 {
     private readonly DataContext _context;
@@ -27,7 +28,7 @@ public sealed class GetTransactionByIdPreProcessor : IRequestPreProcessor<GetTra
         var transaction = await _context.Transactions
             .FirstOrDefaultAsync(i => i.Id == request.TransactionId, cancellationToken);
 
-        if(transaction is null) throw new NotFoundException("Transaction was not found");
+        if (transaction is null) throw new NotFoundException("Transaction was not found");
 
         if (transaction.UserId != request.UserId)
         {

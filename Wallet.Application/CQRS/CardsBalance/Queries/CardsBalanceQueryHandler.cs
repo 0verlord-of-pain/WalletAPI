@@ -8,6 +8,7 @@ using Wallet.Application.CQRS.CardsBalance.Queries.Views;
 using Wallet.Storage.Persistence;
 
 namespace Wallet.Application.CQRS.CardsBalance.Queries;
+
 public sealed class CardsBalanceQueryHandler :
     IRequestHandler<GetCardBalanceQuery, CardBalanceView>,
     IRequestHandler<GetCardBalanceByIdQuery, CardBalanceView>,
@@ -20,18 +21,6 @@ public sealed class CardsBalanceQueryHandler :
     {
         _mapper = mapper;
         _context = context;
-    }
-
-    public async Task<CardBalanceView> Handle(
-        GetCardBalanceQuery request,
-        CancellationToken cancellationToken)
-    {
-        var cardsBalance = await _context.CardsBalance
-            .FirstOrDefaultAsync(i => i.UserId == request.UserId, cancellationToken);
-
-        var result = _mapper.Map<CardBalanceView>(cardsBalance);
-
-        return result;
     }
 
     public async Task<CardBalanceView> Handle(
@@ -48,6 +37,18 @@ public sealed class CardsBalanceQueryHandler :
 
     public async Task<CardBalanceView> Handle(
         GetCardBalanceByUserIdQuery request,
+        CancellationToken cancellationToken)
+    {
+        var cardsBalance = await _context.CardsBalance
+            .FirstOrDefaultAsync(i => i.UserId == request.UserId, cancellationToken);
+
+        var result = _mapper.Map<CardBalanceView>(cardsBalance);
+
+        return result;
+    }
+
+    public async Task<CardBalanceView> Handle(
+        GetCardBalanceQuery request,
         CancellationToken cancellationToken)
     {
         var cardsBalance = await _context.CardsBalance

@@ -2,6 +2,7 @@
 using Wallet.Application.CQRS.Transactions.Queries.Views;
 
 namespace Wallet.Application.CQRS.Transactions.Queries.GetTransactions;
+
 public class GetUserTransactionsQuery : IRequest<IEnumerable<TransactionView>>
 {
     public GetUserTransactionsQuery(Guid userId, int page)
@@ -12,6 +13,4 @@ public class GetUserTransactionsQuery : IRequest<IEnumerable<TransactionView>>
 
     public Guid UserId { get; init; }
     public int Page { get; init; }
-
-    
 }

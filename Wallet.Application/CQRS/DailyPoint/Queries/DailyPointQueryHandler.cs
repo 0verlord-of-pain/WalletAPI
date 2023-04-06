@@ -4,6 +4,7 @@ using Wallet.Application.CQRS.DailyPoint.Queries.GetDailyPoint;
 using Wallet.Storage.Persistence;
 
 namespace Wallet.Application.CQRS.DailyPoint.Queries;
+
 public sealed class DailyPointQueryHandler : IRequestHandler<GetDailyPointQuery, string>
 {
     private readonly DataContext _context;
@@ -21,10 +22,15 @@ public sealed class DailyPointQueryHandler : IRequestHandler<GetDailyPointQuery,
             .FirstOrDefaultAsync(i => i.Id == request.UserId, cancellationToken);
 
         var points = CalculatePoints(user.CreatedOnUtc);
+        var result = "";
 
-        var roundedValue = Math.Ceiling(points / 1000) * 1000;
+        if (points > 1000m)
+        {
+            var roundedValue = Math.Ceiling(points / 1000) * 1000;
+            result = (roundedValue / 1000).ToString("0K");
+        }
 
-        var result = (roundedValue / 1000).ToString("0K");
+        else result = Math.Round(points, 0).ToString();
 
         return result;
     }
@@ -50,7 +56,6 @@ public sealed class DailyPointQueryHandler : IRequestHandler<GetDailyPointQuery,
             seasonStartDate = GetSeasonStartDate(createdOnUtc.AddMonths(m));
             var daysToCharge = (today - seasonStartDate).Days + 1;
             for (var i = 1; i <= daysToCharge; i++)
-            {
                 switch (i)
                 {
                     case 1:
@@ -62,15 +67,14 @@ public sealed class DailyPointQueryHandler : IRequestHandler<GetDailyPointQuery,
                         valueLastDay = 3m;
                         break;
                     default:
-                        {
-                            var addPoints = valueTwoDaysAgo + (0.6m * valueLastDay);
-                            points += addPoints;
-                            valueTwoDaysAgo = valueLastDay;
-                            valueLastDay = addPoints;
-                            break;
-                        }
+                    {
+                        var addPoints = valueTwoDaysAgo + 0.6m * valueLastDay;
+                        points += addPoints;
+                        valueTwoDaysAgo = valueLastDay;
+                        valueLastDay = addPoints;
+                        break;
+                    }
                 }
-            }
         }
 
         return points;
@@ -83,8 +87,6 @@ public sealed class DailyPointQueryHandler : IRequestHandler<GetDailyPointQuery,
         if (date <= new DateTime(year, 12, 1)) return new DateTime(year, 12, 1).Date;
         if (date <= new DateTime(year, 3, 1)) return new DateTime(year, 3, 1).Date;
 
-        return date <= new DateTime(year, 6, 1) ?
-            new DateTime(year, 6, 1).Date :
-            new DateTime(year, 9, 1).Date;
+        return date <= new DateTime(year, 6, 1) ? new DateTime(year, 6, 1).Date : new DateTime(year, 9, 1).Date;
     }
 }

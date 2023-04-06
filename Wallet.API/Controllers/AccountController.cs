@@ -12,19 +12,24 @@ using Wallet.Application.CQRS.Users.Queries.Views;
 using Wallet.Core.Exceptions;
 using Wallet.Core.Extensions;
 using Wallet.Domain.Entities;
+using Wallet.Storage.Persistence;
 
-namespace Wallet.API.Controllers; 
+namespace Wallet.API.Controllers;
+
 public class AccountController : BaseController
 {
     private readonly SignInManager<User> _signInManager;
     private readonly UserManager<User> _userManager;
+    private readonly DataContext _context;
 
     public AccountController(
         UserManager<User> userManager,
-        SignInManager<User> signInManager)
+        SignInManager<User> signInManager,
+        DataContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _context = context;
     }
 
     [HttpPost("signup")]
@@ -44,7 +49,7 @@ public class AccountController : BaseController
 
         var user = await _userManager.Users
             .IgnoreQueryFilters()
-            .FirstOrDefaultAsync(u => u.Email.Equals(email));
+            .FirstOrDefaultAsync(u => u.Email!.Equals(email));
 
         if (user != null)
         {
@@ -63,6 +68,16 @@ public class AccountController : BaseController
         var addToRoleResult = await _userManager.AddToRoleAsync(user, "User");
 
         if (addToRoleResult.TryGetErrors(out _)) throw new IdentityUserException("Failed to add role to user");
+
+        user = await _context.Users.FirstOrDefaultAsync(i => i.Id == user.Id);
+
+        user.CardBalance = CardBalance.Create(user);
+
+        await _context.SaveChangesAsync();
+
+        user.CardBalanceId = user.CardBalance.Id;
+
+        await _context.SaveChangesAsync();
 
         return Created("", "");
     }
@@ -108,11 +123,8 @@ public class AccountController : BaseController
     [ProducesResponseType(typeof(IEnumerable<UserView>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetUsers([FromQuery] int? page = 1)
     {
-        {
-            var command = new GetAllUsersQuery(page.Value);
-            var result = await _mediator.Send(command);
-            return Ok(result);
-        }
+        var result = await _mediator.Send(new GetAllUsersQuery(page!.Value));
+        return Ok(result);
     }
 
     [HttpGet("{userId}")]
@@ -120,8 +132,7 @@ public class AccountController : BaseController
     [ProducesResponseType(typeof(UserView), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get([FromRoute] Guid userId)
     {
-        var command = new GetUserQuery().Create(userId);
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(new GetUserQuery().Create(userId));
         return Ok(result);
     }
 
@@ -130,8 +141,7 @@ public class AccountController : BaseController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete([FromRoute] Guid userId)
     {
-        var command = new DeleteUserCommand(userId);
-        await _mediator.Send(command);
+        await _mediator.Send(new DeleteUserCommand(userId));
         return NoContent();
     }
 
@@ -140,8 +150,7 @@ public class AccountController : BaseController
     [Authorize(Policy = Policies.AdminOrManager)]
     public async Task<IActionResult> Restore([FromRoute] Guid userId)
     {
-        var command = new RestoreUserCommand(userId);
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(new RestoreUserCommand(userId));
         return Ok(result);
     }
 }

@@ -2,6 +2,7 @@
 using Wallet.Application.CQRS.Users.Queries.Views;
 
 namespace Wallet.Application.CQRS.Users.Queries.GetUser;
+
 public class GetUserQuery : IRequest<UserView>
 {
     public Guid UserId { get; init; }

@@ -1,4 +1,5 @@
 ﻿namespace Wallet.API.Infrastructure.Seed;
+
 public struct SeedData
 {
     public static async Task EnsureSeedData(IServiceProvider serviceProvider)
@@ -7,5 +8,6 @@ public struct SeedData
         var seedService = scope.ServiceProvider.GetRequiredService<ISeedService>();
         await seedService.SeedRolesAsync();
         await seedService.SeedAdminAndManagerAsync();
+        await seedService.SeedDefaultUserAsync();
     }
 }

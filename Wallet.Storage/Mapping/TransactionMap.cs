@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Wallet.Domain.Entities;
 
 namespace Wallet.Storage.Mapping;
@@ -10,7 +10,6 @@ public sealed class TransactionMap : IEntityTypeConfiguration<Transaction>
     {
         builder.ToTable("Transaction");
         builder.HasKey(item => item.Id);
-        builder.HasQueryFilter(i => !i.IsArchived);
 
         builder
             .HasIndex(item => item.Id)

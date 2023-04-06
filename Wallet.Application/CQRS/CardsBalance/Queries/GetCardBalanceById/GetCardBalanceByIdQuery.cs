@@ -2,9 +2,10 @@
 using Wallet.Application.CQRS.CardsBalance.Queries.Views;
 
 namespace Wallet.Application.CQRS.CardsBalance.Queries.GetCardBalanceById;
+
 public class GetCardBalanceByIdQuery : IRequest<CardBalanceView>
 {
-    public GetCardBalanceByIdQuery(Guid cardBalanceId , Guid userId)
+    public GetCardBalanceByIdQuery(Guid cardBalanceId, Guid userId)
     {
         CardBalanceId = cardBalanceId;
         UserId = userId;

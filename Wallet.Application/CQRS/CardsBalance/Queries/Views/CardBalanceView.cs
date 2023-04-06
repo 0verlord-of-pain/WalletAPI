@@ -1,4 +1,5 @@
 ﻿namespace Wallet.Application.CQRS.CardsBalance.Queries.Views;
+
 public class CardBalanceView
 {
     public Guid Id { get; set; }

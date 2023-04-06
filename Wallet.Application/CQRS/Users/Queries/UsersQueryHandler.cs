@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using MediatR;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Wallet.Application.CQRS.Users.Queries.GetAll;
 using Wallet.Application.CQRS.Users.Queries.GetUser;
@@ -8,6 +8,7 @@ using Wallet.Application.CQRS.Users.Queries.Views;
 using Wallet.Storage.Persistence;
 
 namespace Wallet.Application.CQRS.Users.Queries;
+
 public sealed class UsersQueryHandler :
     IRequestHandler<GetAllUsersQuery, IEnumerable<UserView>>,
     IRequestHandler<GetUserQuery, UserView>

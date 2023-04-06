@@ -1,6 +1,7 @@
 ﻿using Wallet.API.Persistence;
 
 namespace Wallet.API.Infrastructure.Extensions;
+
 public static class AuthenticationExtensions
 {
     public static IServiceCollection AddAuthenticationCustom(this IServiceCollection services)
