@@ -2,6 +2,7 @@
 using Wallet.API.Infrastructure.Helpers;
 
 namespace Wallet.API.Infrastructure.Extensions;
+
 public static class ApplicationBuilderExtension
 {
     public static void UseErrorHandler(this IApplicationBuilder app, IWebHostEnvironment environment)

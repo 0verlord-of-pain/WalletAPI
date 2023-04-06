@@ -1,17 +1,18 @@
 ﻿using MediatR.Pipeline;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using SkiaSharp;
+using Wallet.Core.Enums;
 using Wallet.Core.Exceptions;
 using Wallet.Domain.Entities;
-using SkiaSharp;
 using Wallet.Storage.Persistence;
-using Wallet.Core.Enums;
 
 namespace Wallet.Application.CQRS.Transactions.Commands.Create;
+
 public sealed class CreateTransactionPreProcessor : IRequestPreProcessor<CreateTransactionCommand>
 {
-    private readonly UserManager<User> _userManager;
     private readonly DataContext _context;
+    private readonly UserManager<User> _userManager;
 
     public CreateTransactionPreProcessor(UserManager<User> userManager, DataContext context)
     {
@@ -28,14 +29,12 @@ public sealed class CreateTransactionPreProcessor : IRequestPreProcessor<CreateT
 
         if (string.IsNullOrEmpty(request.Details)) throw new ValidationException("The Details field cannot be empty");
 
-        if (string.IsNullOrEmpty(request.Name)) throw new ValidationException("The Name field cannot be empty");
-
         if (!await IsImage(request.ImageUrl)) throw new ValidationException("Image link is incorrect");
 
         var cardBalance = await _context.CardsBalance
-            .FirstOrDefaultAsync(i=>i.Id == request.CardBalanceId,cancellationToken);
+            .FirstOrDefaultAsync(i => i.Id == request.CardBalanceId, cancellationToken);
 
-        if(cardBalance is null) throw new NotFoundException("Card Balance was not found");
+        if (cardBalance is null) throw new NotFoundException("Card Balance was not found");
 
         switch (request.Type)
         {
@@ -43,7 +42,8 @@ public sealed class CreateTransactionPreProcessor : IRequestPreProcessor<CreateT
                 if (cardBalance.Balance - request.Amount <= 0) throw new ArgumentException("Insufficient balance");
                 break;
             case TransactionType.Payment:
-                if (cardBalance.Balance + request.Amount > cardBalance.Limit) throw new ArgumentException("Limit exceeded");
+                if (cardBalance.Balance + request.Amount > cardBalance.Limit)
+                    throw new ArgumentException("Limit exceeded");
                 break;
         }
     }
@@ -53,13 +53,16 @@ public sealed class CreateTransactionPreProcessor : IRequestPreProcessor<CreateT
         var isValid = false;
         try
         {
-            using var client = new HttpClient();
-            await using var stream = await client.GetStreamAsync(url);
-            using var skiaStream = new SKManagedStream(stream);
-            using var skBitmap = SKBitmap.Decode(skiaStream);
-            if (skBitmap != null) isValid = true;
+            var client = new HttpClient();
+
+            var res = await client.GetAsync(url);
+
+            isValid = res.ToString().Contains("Content-Type: image");
         }
-        catch { }
+        catch
+        {
+        }
+
         return isValid;
     }
 }

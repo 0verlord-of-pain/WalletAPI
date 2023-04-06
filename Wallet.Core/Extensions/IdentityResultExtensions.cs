@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
 namespace Wallet.Core.Extensions;
+
 public static class IdentityResultExtensions
 {
     public static bool TryGetErrors(this IdentityResult result, out string errors)

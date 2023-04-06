@@ -10,6 +10,7 @@ using Wallet.Application.CQRS.Transactions.Queries.GetTransactionsByUserId;
 using Wallet.Application.CQRS.Transactions.Queries.Views;
 
 namespace Wallet.API.Controllers;
+
 public class TransactionController : BaseController
 {
     [HttpGet]
@@ -17,8 +18,7 @@ public class TransactionController : BaseController
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetUserTransactions([FromQuery] int? page = 1)
     {
-        var command = new GetUserTransactionsQuery(UserId, page.Value);
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(new GetUserTransactionsQuery(UserId, page!.Value));
         return Ok(result);
     }
 
@@ -27,18 +27,16 @@ public class TransactionController : BaseController
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTransaction([FromRoute] Guid transactionId)
     {
-        var command = new GetTransactionByIdQuery(UserId, transactionId);
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(new GetTransactionByIdQuery(UserId, transactionId));
         return Ok(result);
     }
 
     [HttpGet("users/{userId}")]
     [Authorize(Policy = Policies.AdminOrManager)]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetTransactionsByUserId( [FromRoute] Guid userId, [FromQuery] int? page = 1)
+    public async Task<IActionResult> GetTransactionsByUserId([FromRoute] Guid userId, [FromQuery] int? page = 1)
     {
-        var command = new GetTransactionsByUserIdQuery(userId, page.Value);
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(new GetTransactionsByUserIdQuery(userId, page!.Value));
         return Ok(result);
     }
 
@@ -48,15 +46,14 @@ public class TransactionController : BaseController
     public async Task<IActionResult> Create([FromBody] CreateTransactionModel model)
     {
         var command = new CreateTransactionCommand(
-            UserId, 
+            UserId,
             model.CardBalanceId,
-            model.Type, 
-            model.Amount, 
-            model.Name, 
-            model.Details, 
-            model.Status, 
+            model.Type,
+            model.Amount,
+            model.Details,
+            model.Status,
             model.ImageUrl);
-        var result  = await _mediator.Send(command);
+        var result = await _mediator.Send(command);
         return Ok(result);
     }
 
@@ -65,8 +62,7 @@ public class TransactionController : BaseController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> Delete([FromRoute] Guid transactionId)
     {
-        var command = new DeleteTransactionCommand(UserId, transactionId);
-        await _mediator.Send(command);
+        await _mediator.Send(new DeleteTransactionCommand(UserId, transactionId));
         return NoContent();
     }
 }

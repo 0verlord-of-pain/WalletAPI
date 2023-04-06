@@ -5,6 +5,7 @@ using Wallet.Application.CQRS.Users.Commands.RestoreUser;
 using Wallet.Storage.Persistence;
 
 namespace Wallet.Application.CQRS.Users.Commands;
+
 public sealed class UserCommandHandler :
     IRequestHandler<DeleteUserCommand, Unit>,
     IRequestHandler<RestoreUserCommand, Guid>
@@ -38,6 +39,6 @@ public sealed class UserCommandHandler :
             .FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
         user?.Restore();
         await _context.SaveChangesAsync(cancellationToken);
-        return user.Id;
+        return user!.Id;
     }
 }

@@ -2,6 +2,7 @@
 using Wallet.Domain.Extensions;
 
 namespace Wallet.Storage.Extensions;
+
 public static class DbContextExtensions
 {
     public static void UpdateSystemDates(this DbContext context)

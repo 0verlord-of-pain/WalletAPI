@@ -2,6 +2,7 @@
 using Wallet.Domain.Entities;
 
 namespace Wallet.API.Infrastructure.Validators;
+
 public class PasswordValidator
 {
     private readonly UserManager<User> _userManager;

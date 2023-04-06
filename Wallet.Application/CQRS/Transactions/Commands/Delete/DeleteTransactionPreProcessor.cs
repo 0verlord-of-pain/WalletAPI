@@ -23,7 +23,8 @@ public sealed class DeleteTransactionPreProcessor : IRequestPreProcessor<DeleteT
         var user = await _userManager.FindByIdAsync(request.UserId.ToString());
         if (user is null) throw new NotFoundException("User was not found");
 
-        var transaction = await _context.Transactions.FirstOrDefaultAsync(i => i.Id == request.TransactionId, cancellationToken);
+        var transaction =
+            await _context.Transactions.FirstOrDefaultAsync(i => i.Id == request.TransactionId, cancellationToken);
         if (transaction is null) throw new NotFoundException("Transaction was not found");
 
         var userPolicy = await _userManager.GetRolesAsync(user);

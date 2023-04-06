@@ -2,6 +2,7 @@
 using Wallet.Application.CQRS.Transactions.Queries.Views;
 
 namespace Wallet.Application.CQRS.Transactions.Queries.GetTransactionById;
+
 public class GetTransactionByIdQuery : IRequest<TransactionView>
 {
     public GetTransactionByIdQuery(Guid userId, Guid transactionId)

@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using Wallet.Core.Exceptions;
-using ValidationException = Wallet.Core.Exceptions.ValidationException;
 
 namespace Wallet.API.Infrastructure.Helpers;
+
 internal static class ErrorHelper
 {
     public static ErrorResponse CreateErrorResponse(Exception exception, bool includeStackTrace = false)

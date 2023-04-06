@@ -1,2 +1,3 @@
 ﻿namespace Wallet.Application;
-public class AssemblyInfo { }
+
+public class AssemblyInfo{}

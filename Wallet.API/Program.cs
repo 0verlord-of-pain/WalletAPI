@@ -1,16 +1,16 @@
-using MediatR;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using MediatR;
 using Wallet.API.Infrastructure.Extensions;
 using Wallet.API.Infrastructure.Seed;
 using Wallet.Application;
 
 namespace Wallet.API;
+
 public class Program
 {
     public static void Main(string[] args)
     {
-
         var builder = WebApplication.CreateBuilder(args);
         var services = builder.Services;
 

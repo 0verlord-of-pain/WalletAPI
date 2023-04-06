@@ -2,6 +2,7 @@
 using Wallet.Storage.Persistence;
 
 namespace Wallet.API.Infrastructure.Extensions;
+
 public static class DbConfigurationExtensions
 {
     public static IServiceCollection AddDbContextsCustom(

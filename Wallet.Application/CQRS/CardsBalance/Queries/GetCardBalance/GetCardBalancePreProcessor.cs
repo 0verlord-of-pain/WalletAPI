@@ -1,10 +1,10 @@
 ﻿using MediatR.Pipeline;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Wallet.Core.Exceptions;
 using Wallet.Storage.Persistence;
 
 namespace Wallet.Application.CQRS.CardsBalance.Queries.GetCardBalance;
+
 public sealed class GetCardBalancePreProcessor : IRequestPreProcessor<GetCardBalanceQuery>
 {
     private readonly DataContext _context;

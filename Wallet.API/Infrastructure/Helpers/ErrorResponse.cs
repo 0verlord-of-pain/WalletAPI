@@ -1,7 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Net;
+﻿using System.Net;
+using Newtonsoft.Json;
 
 namespace Wallet.API.Infrastructure.Helpers;
+
 internal sealed class ErrorResponse
 {
     public ErrorResponse(
@@ -13,6 +14,7 @@ internal sealed class ErrorResponse
         StatusCode = statusCode;
         Details = details;
     }
+
     public HttpStatusCode StatusCode { get; }
     public string Message { get; }
     public string Details { get; }
